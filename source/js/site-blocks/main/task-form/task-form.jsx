@@ -15,7 +15,7 @@ export default function TaskForm({ setTasks, updateMode, setUpdateMode }) {
   function updateModeOn({ name, date }) {
     setTasks((prevState) => prevState.map((task) => {
       if (task.id === updateMode.updatingTask.id) {
-        return { id: updateMode.updatingTask.id, name, date };
+        return { id: updateMode.updatingTask.id, name: name.trim(), date: date.trim() };
       }
       return task;
     }));
@@ -26,8 +26,8 @@ export default function TaskForm({ setTasks, updateMode, setUpdateMode }) {
 
   // Обработчик <form> по сабмиту, если просто добавляется новая задача.
 
-  function addNewTask(formatedData) {
-    setTasks((prevState) => [...prevState, { ...formatedData, id: Number(prevState.length + 1) }]);
+  function addNewTask({ name, date }) {
+    setTasks((prevState) => [...prevState, { id: Number(prevState.length + 1), name: name.trim(), date: date.trim() }]);
     setIsFormActive((prevState) => !prevState);
   }
 

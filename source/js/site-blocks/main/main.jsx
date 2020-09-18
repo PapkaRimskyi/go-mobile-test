@@ -16,7 +16,7 @@ export default function Main() {
   return (
     <main className="main">
       <TaskForm setTasks={setTasks} updateMode={updateMode} setUpdateMode={setUpdateMode} />
-      <TodoTable setTasks={setTasks} tasksData={tasks} updateMode={updateMode} setUpdateMode={setUpdateMode} foundTasks={searchTask(searchWord, tasks)} />
+      <TodoTable setTasks={setTasks} tasksData={tasks} updateMode={updateMode} setUpdateMode={setUpdateMode} foundTasks={searchTask(searchWord, tasks)} searchWord={searchWord} />
       <Search setSearchWord={setSearchWord} />
     </main>
   );

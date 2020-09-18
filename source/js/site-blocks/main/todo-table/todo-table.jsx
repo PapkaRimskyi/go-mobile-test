@@ -9,7 +9,7 @@ import sortTasks from '../../../utils/sort-tasks';
 import ColumnsType from './columns-type/columns-type';
 import ColumnInfo from './columns-info/column-info';
 
-export default function TodoTable({ tasksData, setTasks, setUpdateMode, updateMode, foundTasks }) {
+export default function TodoTable({ tasksData, setTasks, setUpdateMode, updateMode, foundTasks, searchWord }) {
   const [sortButton, setSortButton] = useState(null);
   const prevSortButton = usePrevious(sortButton);
 
@@ -22,15 +22,17 @@ export default function TodoTable({ tasksData, setTasks, setUpdateMode, updateMo
     }
   }, [sortButton]);
 
-  // Если длина не равна 0, то возвращается длина (это для условия в рендере. Если длина = 0, рендерится текст 'Ничего нет').
+  // Если длина не равна 0, то возвращается true (это для условия в рендере. Если длина = 0, рендерится текст 'Ничего нет').
 
   function isTasksLengthNotZero() {
     if (foundTasks && foundTasks.length) {
-      return foundTasks.length;
+      return true;
+    } if (searchWord && foundTasks.length === 0) {
+      return false;
     } if (tasksData.length) {
-      return tasksData.length;
+      return true;
     }
-    return 0;
+    return false;
   }
 
   //
@@ -107,6 +109,7 @@ TodoTable.propTypes = {
     }),
   }),
   foundTasks: PropTypes.arrayOf(PropTypes.object),
+  searchWord: PropTypes.string,
 };
 
 TodoTable.defaultProps = {
@@ -114,4 +117,5 @@ TodoTable.defaultProps = {
     updatingTask: null,
   }),
   foundTasks: null,
+  searchWord: null,
 };

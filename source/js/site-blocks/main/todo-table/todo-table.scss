@@ -76,6 +76,19 @@
   &__button {
     border-top: 1px solid $black-color;
   }
+
+  &__task-button {
+    transition: opacity, .3s ease-in;
+  }
+
+  &__task-button:hover,
+  &__task-button:focus {
+    opacity: .5;
+  }
+
+  &__task-button:active {
+    opacity: .3;
+  }
 }
 
 @media screen and (min-width: $desktop-width) and (orientation: landscape) {

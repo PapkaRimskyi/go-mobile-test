@@ -7,7 +7,7 @@ export default function Search({ setSearchWord }) {
   function searchEnter(e) {
     if (e.key === 'Enter') {
       if (e.target.value) {
-        setSearchWord(e.target.value);
+        setSearchWord(e.target.value.trim());
       } else {
         setSearchWord(null);
       }
