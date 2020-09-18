@@ -9,7 +9,7 @@ import sortTasks from '../../../utils/sort-tasks';
 import ColumnsType from './columns-type/columns-type';
 import ColumnInfo from './columns-info/column-info';
 
-export default function TodoTable({ tasksData, setTasks, setUpdateMode, updateMode }) {
+export default function TodoTable({ tasksData, setTasks, setUpdateMode, updateMode, foundTasks }) {
   const [sortButton, setSortButton] = useState(null);
   const prevSortButton = usePrevious(sortButton);
 
@@ -21,6 +21,19 @@ export default function TodoTable({ tasksData, setTasks, setUpdateMode, updateMo
       }
     }
   }, [sortButton]);
+
+  // Если длина не равна 0, то возвращается длина (это для условия в рендере. Если длина = 0, рендерится текст 'Ничего нет').
+
+  function isTasksLengthNotZero() {
+    if (foundTasks && foundTasks.length) {
+      return foundTasks.length;
+    } if (tasksData.length) {
+      return tasksData.length;
+    }
+    return 0;
+  }
+
+  //
 
   // Определение типа сортировки
 
@@ -68,15 +81,15 @@ export default function TodoTable({ tasksData, setTasks, setUpdateMode, updateMo
 
   return (
     <section className="todo-table">
-      {tasksData.length !== 0
+      {isTasksLengthNotZero()
         ? (
           <table className="todo-table__table" onClick={taskButtonsHandler}>
             <tbody>
               <ColumnsType sortTypeHandler={sortTypeHandler} />
-              {sortTasks(sortButton && sortButton.id, tasksData).map(({ id, name, date }) => <ColumnInfo key={`${id}-${new Date().getMilliseconds()}`} id={id} name={name} date={date} />)}
+              {sortTasks(sortButton && sortButton.id, foundTasks || tasksData).map(({ id, name, date }) => <ColumnInfo key={`${id}-${new Date().getMilliseconds()}`} id={id} name={name} date={date} />)}
             </tbody>
           </table>
-        ) : <p className="todo-table__no-tasks">Добавьте задачу</p>}
+        ) : <p className="todo-table__no-tasks">Ничего нет</p>}
     </section>
   );
 }
@@ -93,10 +106,12 @@ TodoTable.propTypes = {
       date: PropTypes.string.isRequired,
     }),
   }),
+  foundTasks: PropTypes.arrayOf(PropTypes.object),
 };
 
 TodoTable.defaultProps = {
   updateMode: PropTypes.shape({
     updatingTask: null,
   }),
+  foundTasks: null,
 };
