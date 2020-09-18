@@ -1,0 +1,12 @@
+.footer {
+  margin: $margin-auto;
+  width: $mobile-width;
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (min-width: $desktop-width) and (orientation: landscape) {
+  .footer {
+    width: $desktop-width-container;
+  }
+}

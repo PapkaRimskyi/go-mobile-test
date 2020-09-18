@@ -1,0 +1,99 @@
+.todo-table {
+  margin: $margin-auto;
+  margin-bottom: 40px;
+  width: 100%;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #0062ff;
+    border-radius: 2px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #e6e6e6;
+  }
+
+  &__no-tasks {
+    text-align: center;
+  }
+
+  &__table {
+    border: 3px dashed $black-color;
+    border-spacing: 10px;
+    border-collapse: collapse;
+    text-align: center;
+  }
+
+  & tr {
+    border-bottom: 1px solid $black-color;
+  }
+
+  &__column-type {
+    border-right: 1px solid $black-color;
+  }
+
+  &__sort-button {
+    padding: 10px 5px;
+    width: 100%;
+    font-size: 16px;
+    line-height: 20px;
+    background-color: #f2f2f2;
+    text-transform: uppercase;
+    transition: text-decoration, background-color, .3s ease;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
+
+    &:active {
+      text-decoration: none;
+      background-color: rgb(100, 98, 98);
+    }
+
+    &:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__task-info {
+    border-bottom: 1px solid $black-color;
+
+    & td {
+      padding: 10px;
+      font-size: 14px;
+      line-height: 16px;
+      border-right: 1px solid $black-color;
+    }
+  }
+
+  &__button {
+    border-top: 1px solid $black-color;
+  }
+}
+
+@media screen and (min-width: $desktop-width) and (orientation: landscape) {
+  .todo-table {
+    overflow-x: hidden;
+
+    &__sort-button {
+      padding: 20px;
+      font-size: 28px;
+      line-height: 34px;
+    }
+
+    &__task-info {
+      & td {
+        padding: 20px;
+        font-size: 24px;
+        line-height: 30px;
+      }
+    }
+  }
+}

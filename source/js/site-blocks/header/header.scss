@@ -1,0 +1,25 @@
+.header {
+  margin: $margin-auto;
+  margin-bottom: 15px;
+  padding-top: 20px;
+  width: $mobile-width;
+
+  &__headline {
+    padding: 10px;
+    font-size: 28px;
+    line-height: 36px;
+    text-align: center;
+    text-decoration: underline;
+  }
+}
+
+@media screen and (min-width: $desktop-width) and (orientation: landscape) {
+  .header {
+    width: $desktop-width-container;
+
+    &__headline {
+      font-size: 36px;
+      line-height: 42px;
+    }
+  }
+}

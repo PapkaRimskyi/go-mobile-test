@@ -1,0 +1,11 @@
+.main {
+  margin: $margin-auto;
+  width: $mobile-width;
+  flex: 1 0 auto;
+}
+
+@media screen and (min-width: $desktop-width) and (orientation: landscape) {
+  .main {
+    width: $desktop-width-container;
+  }
+}
