@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-export default function TaskForm({ setTasks, updateMode, setUpdateMode }) {
+export default function TaskForm({ tasksData, updateMode, updateModeOff, addTask, changeTask }) {
   const [isFormActive, setIsFormActive] = useState(false);
 
   function openFormHandler(e) {
@@ -12,14 +12,9 @@ export default function TaskForm({ setTasks, updateMode, setUpdateMode }) {
 
   // Обработчик <form> по сабмиту, если статус апдейда true
 
-  function updateModeOn({ name, date }) {
-    setTasks((prevState) => prevState.map((task) => {
-      if (task.id === updateMode.updatingTask.id) {
-        return { id: updateMode.updatingTask.id, name: name.trim(), date: date.trim() };
-      }
-      return task;
-    }));
-    setUpdateMode(() => ({ status: false, updatingTask: null }));
+  function acceptTaskChange({ name, date }) {
+    changeTask({ id: updateMode.updatingTask.id, name, date });
+    updateModeOff();
   }
 
   //
@@ -27,7 +22,7 @@ export default function TaskForm({ setTasks, updateMode, setUpdateMode }) {
   // Обработчик <form> по сабмиту, если просто добавляется новая задача.
 
   function addNewTask({ name, date }) {
-    setTasks((prevState) => [...prevState, { id: Number(prevState.length + 1), name: name.trim(), date: date.trim() }]);
+    addTask({ id: Number(tasksData.length + 1), name: name.trim(), date: date.trim() });
     setIsFormActive((prevState) => !prevState);
   }
 
@@ -39,7 +34,7 @@ export default function TaskForm({ setTasks, updateMode, setUpdateMode }) {
     e.preventDefault();
     const formatedData = Object.fromEntries(new FormData(e.target).entries());
     if (updateMode.status) {
-      updateModeOn(formatedData);
+      acceptTaskChange(formatedData);
     } else {
       addNewTask(formatedData);
     }
@@ -72,7 +67,7 @@ export default function TaskForm({ setTasks, updateMode, setUpdateMode }) {
 }
 
 TaskForm.propTypes = {
-  setTasks: PropTypes.func.isRequired,
+  tasksData: PropTypes.arrayOf(PropTypes.object).isRequired,
   updateMode: PropTypes.shape({
     status: PropTypes.bool.isRequired,
     updatingTask: PropTypes.shape({
@@ -80,12 +75,8 @@ TaskForm.propTypes = {
       name: PropTypes.string.isRequired,
       date: PropTypes.string.isRequired,
     }),
-  }),
-  setUpdateMode: PropTypes.func.isRequired,
-};
-
-TaskForm.defaultProps = {
-  updateMode: PropTypes.shape({
-    updatingTask: null,
-  }),
+  }).isRequired,
+  updateModeOff: PropTypes.func.isRequired,
+  addTask: PropTypes.func.isRequired,
+  changeTask: PropTypes.func.isRequired,
 };

@@ -1,23 +1,33 @@
-import React, { useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import mockTasks from '../../mock/mock-tasks';
+import TaskForm from './task-form/container';
+import TodoTable from './todo-table/container';
+import Search from './search/container';
 
-import searchTask from '../../utils/search-task';
-
-import TaskForm from './task-form/task-form';
-import TodoTable from './todo-table/todo-table';
-import Search from './search/search';
-
-export default function Main() {
-  const [tasks, setTasks] = useState(mockTasks);
-  const [updateMode, setUpdateMode] = useState({ status: false, updatingTask: null });
-  const [searchWord, setSearchWord] = useState(null);
-
+export default function Main({ mockTasks, updateMode, updateModeOff }) {
   return (
     <main className="main">
-      <TaskForm setTasks={setTasks} updateMode={updateMode} setUpdateMode={setUpdateMode} />
-      <TodoTable setTasks={setTasks} tasksData={tasks} updateMode={updateMode} setUpdateMode={setUpdateMode} foundTasks={searchTask(searchWord, tasks)} searchWord={searchWord} />
-      <Search setSearchWord={setSearchWord} />
+      <TaskForm tasksData={mockTasks} updateMode={updateMode} updateModeOff={updateModeOff} />
+      <TodoTable tasksData={mockTasks} updateMode={updateMode} updateModeOff={updateModeOff} />
+      <Search />
     </main>
   );
 }
+
+Main.propTypes = {
+  mockTasks: PropTypes.arrayOf(PropTypes.object),
+  updateMode: PropTypes.shape({
+    status: PropTypes.bool.isRequired,
+    updatingTask: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      date: PropTypes.string.isRequired,
+    }),
+  }).isRequired,
+  updateModeOff: PropTypes.func.isRequired,
+};
+
+Main.defaultProps = {
+  mockTasks: null,
+};

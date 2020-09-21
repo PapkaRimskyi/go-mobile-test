@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function Search({ setSearchWord }) {
-  // Обработчик на кнопку Enter. Если есть value у поля, то идет запись в стор и последующий поиск этой задачи. Если value нет, то идет перезапись на null (чтобы сбросить поиск).
+export default function Search({ searchAction }) {
+  // Обработчик на кнопку Enter. Если у поля есть value, то идет запись в стор и последующий поиск этой задачи. Если value нет, то идет перезапись на null (чтобы сбросить поиск).
 
   function searchEnter(e) {
     if (e.key === 'Enter') {
       if (e.target.value) {
-        setSearchWord(e.target.value.trim());
+        searchAction(e.target.value.trim().toUpperCase());
       } else {
-        setSearchWord(null);
+        searchAction(null);
       }
     }
   }
@@ -24,5 +24,5 @@ export default function Search({ setSearchWord }) {
 }
 
 Search.propTypes = {
-  setSearchWord: PropTypes.func.isRequired,
+  searchAction: PropTypes.func.isRequired,
 };
