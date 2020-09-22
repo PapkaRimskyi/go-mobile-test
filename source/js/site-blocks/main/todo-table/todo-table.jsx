@@ -8,6 +8,7 @@ import ColumnInfo from './columns-info/column-info';
 
 export default function TodoTable({ tasksData, updateMode, updateModeOn, updateModeOff, searchedResult, deleteTaskAction }) {
   // Определяем, какой массив стоит использовать для рендера. Если searchWord !== null, то это означает, что выполняется поиск. Соотвественно, возвращается массив, который нашел все похожие значения.
+  // Так же используется для того, чтобы узнать длину массива. Если длина = 0, то выводится сообщение "Ничего нет".
 
   function getTasksData() {
     return searchedResult || tasksData;
@@ -15,7 +16,7 @@ export default function TodoTable({ tasksData, updateMode, updateModeOn, updateM
 
   //
 
-  // Апдейт таска
+  // Инициализация апдейта таска
 
   function initUpdateTask(currentTaskID) {
     updateModeOn({ status: true, tasksData, currentTaskID });
@@ -42,12 +43,12 @@ export default function TodoTable({ tasksData, updateMode, updateModeOn, updateM
 
   //
 
-  // Так как я использовал делегирование и навесил обработчик по клику на <table>, я использую closest для нахождения ID.
+  // Так как я использовал делегирование и навесил обработчик по клику на <table>, я использую closest для нахождения ID таска.
 
   function taskButtonsHandler(e) {
-    if (e.target.closest('.todo-table__remove-task') || e.target.closest('.todo-table__edit-task')) {
-      const currentTaskID = Number(e.target.closest('.todo-table__task-info').id);
-      if (e.target.closest('.todo-table__remove-task')) {
+    if (e.target.closest('.remove-task') || e.target.closest('.edit-task')) {
+      const currentTaskID = Number(e.target.closest('tr').id);
+      if (e.target.closest('.remove-task')) {
         deleteTask(currentTaskID);
       } else {
         initUpdateTask(currentTaskID);
@@ -73,7 +74,7 @@ export default function TodoTable({ tasksData, updateMode, updateModeOn, updateM
 }
 
 TodoTable.propTypes = {
-  tasksData: PropTypes.arrayOf(PropTypes.object).isRequired,
+  tasksData: PropTypes.arrayOf(PropTypes.object),
   updateMode: PropTypes.shape({
     status: PropTypes.bool.isRequired,
     updatingTask: PropTypes.shape({
@@ -89,5 +90,6 @@ TodoTable.propTypes = {
 };
 
 TodoTable.defaultProps = {
+  tasksData: null,
   searchedResult: null,
 };

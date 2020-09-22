@@ -79,15 +79,15 @@
 
   &__task-button {
     transition: opacity, .3s ease-in;
-  }
 
-  &__task-button:hover,
-  &__task-button:focus {
-    opacity: .5;
-  }
+    &:hover,
+    &:focus {
+      opacity: .5;
+    }
 
-  &__task-button:active {
-    opacity: .3;
+    &:active {
+      opacity: .3;
+    }
   }
 }
 

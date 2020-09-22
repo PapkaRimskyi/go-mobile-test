@@ -31,7 +31,6 @@ function mapStateToProps(state) {
   return {
     mockTasks: [...getFilteredTasks(state.tasks, state.filter)],
     updateMode: state.updateMode,
-    filter: state.filter,
   };
 }
 

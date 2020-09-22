@@ -11,12 +11,12 @@ export default function ColumnInfo({ id, name, date }) {
       <td>{name}</td>
       <td>{date}</td>
       <td className="todo-table__button">
-        <button type="button" className="todo-table__task-button todo-table__remove-task">
+        <button type="button" className="todo-table__task-button remove-task">
           <Cross />
         </button>
       </td>
       <td className="todo-table__button">
-        <button type="button" className="todo-table__task-button todo-table__edit-task">
+        <button type="button" className="todo-table__task-button edit-task">
           <Edit />
         </button>
       </td>
