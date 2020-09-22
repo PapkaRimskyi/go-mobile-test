@@ -27,6 +27,10 @@
 
 ### Стэк технологий.
   HTML/CSS(SASS).
-  JS, React, React + Hooks, PropTypes (для типизации пропсов).
+  JS, React, React + Hooks, Redux, PropTypes (для типизации пропсов).
   Webpack.
 
+### UPD
+
+Первый опыт с Redux.
+В файле "container" идет подключение компонента к редакс стору.

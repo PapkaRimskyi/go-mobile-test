@@ -2,7 +2,14 @@
   margin: $margin-auto;
   width: $mobile-width;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+
+  &__label {
+    margin-bottom: 15px;
+    cursor: pointer;
+  }
 
   &__search-input {
     padding: 10px 15px;
@@ -22,6 +29,12 @@
 @media screen and (min-width: $desktop-width) and (orientation: landscape) {
   .search {
     width: $desktop-width;
+    flex-direction: row;
+
+    &__label {
+      margin-right: 20px;
+      margin-bottom: 0;
+    }
 
     &__search-input {
       font-size: 18px;

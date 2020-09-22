@@ -1,48 +1,25 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import usePrevious from '../../../custom-hooks/use-previous';
 
-import sortTasks from '../../../utils/sort-tasks';
-
-import ColumnsType from './columns-type/columns-type';
+import ColumnsType from './columns-type/container';
 import ColumnInfo from './columns-info/column-info';
 
-export default function TodoTable({ tasksData, setTasks, setUpdateMode, updateMode, foundTasks, searchWord }) {
-  const [sortButton, setSortButton] = useState(null);
-  const prevSortButton = usePrevious(sortButton);
+export default function TodoTable({ tasksData, updateMode, updateModeOn, updateModeOff, searchedResult, deleteTaskAction }) {
+  // Определяем, какой массив стоит использовать для рендера. Если searchWord !== null, то это означает, что выполняется поиск. Соотвественно, возвращается массив, который нашел все похожие значения.
+  // Так же используется для того, чтобы узнать длину массива. Если длина = 0, то выводится сообщение "Ничего нет".
 
-  useEffect(() => {
-    if (sortButton && sortButton !== prevSortButton) {
-      sortButton.style.backgroundColor = 'rgba(109,165,83,.7)';
-      if (prevSortButton) {
-        prevSortButton.style.backgroundColor = null;
-      }
-    }
-  }, [sortButton]);
-
-  // Если длина не равна 0, то возвращается true (это для условия в рендере. Если длина = 0, рендерится текст 'Ничего нет').
-
-  function isTasksLengthNotZero() {
-    if (foundTasks && foundTasks.length) {
-      return true;
-    } if (searchWord && foundTasks.length === 0) {
-      return false;
-    } if (tasksData.length) {
-      return true;
-    }
-    return false;
+  function getTasksData() {
+    return searchedResult || tasksData;
   }
 
   //
 
-  // Определение типа сортировки
+  // Инициализация апдейта таска
 
-  function sortTypeHandler(e) {
-    if (e.target.tagName === 'BUTTON') {
-      setSortButton(e.target);
-    }
+  function initUpdateTask(currentTaskID) {
+    updateModeOn({ status: true, tasksData, currentTaskID });
   }
 
   //
@@ -50,31 +27,31 @@ export default function TodoTable({ tasksData, setTasks, setUpdateMode, updateMo
   // Удаление таска
 
   function deleteTask(currentTaskID) {
-    setTasks((prevState) => prevState.filter((task) => task.id !== currentTaskID));
+    deleteTaskAction(currentTaskID);
+    closeTaskForm(currentTaskID);
+  }
+
+  //
+
+  // Если в момент удаления таск был в состоянии редактирования, то окно с редактированием закрывается.
+
+  function closeTaskForm(currentTaskID) {
     if (updateMode.status && updateMode.updatingTask.id === currentTaskID) {
-      setUpdateMode(() => ({ status: false, updatingTask: null }));
+      updateModeOff();
     }
   }
 
   //
 
-  // Апдейт таска
-
-  function updateTask(currentTaskID) {
-    setUpdateMode(() => ({ status: true, updatingTask: tasksData.filter((task) => task.id === currentTaskID)[0] }));
-  }
-
-  //
-
-  // Так как я использовал делегирование и навесил обработчик по клику на <table>, я использую closest для нахождения ID.
+  // Так как я использовал делегирование и навесил обработчик по клику на <table>, я использую closest для нахождения ID таска.
 
   function taskButtonsHandler(e) {
-    if (e.target.closest('.todo-table__remove-task') || e.target.closest('.todo-table__edit-task')) {
-      const currentTaskID = Number(e.target.closest('.todo-table__task-info').id);
-      if (e.target.closest('.todo-table__remove-task')) {
+    if (e.target.closest('.remove-task') || e.target.closest('.edit-task')) {
+      const currentTaskID = Number(e.target.closest('tr').id);
+      if (e.target.closest('.remove-task')) {
         deleteTask(currentTaskID);
       } else {
-        updateTask(currentTaskID);
+        initUpdateTask(currentTaskID);
       }
     }
   }
@@ -83,12 +60,12 @@ export default function TodoTable({ tasksData, setTasks, setUpdateMode, updateMo
 
   return (
     <section className="todo-table">
-      {isTasksLengthNotZero()
+      {getTasksData().length
         ? (
           <table className="todo-table__table" onClick={taskButtonsHandler}>
             <tbody>
-              <ColumnsType sortTypeHandler={sortTypeHandler} />
-              {sortTasks(sortButton && sortButton.id, foundTasks || tasksData).map(({ id, name, date }) => <ColumnInfo key={`${id}-${new Date().getMilliseconds()}`} id={id} name={name} date={date} />)}
+              <ColumnsType />
+              {getTasksData().map(({ id, name, date }) => <ColumnInfo key={`${id}-${new Date().getMilliseconds()}`} id={id} name={name} date={date} />)}
             </tbody>
           </table>
         ) : <p className="todo-table__no-tasks">Ничего нет</p>}
@@ -97,9 +74,7 @@ export default function TodoTable({ tasksData, setTasks, setUpdateMode, updateMo
 }
 
 TodoTable.propTypes = {
-  tasksData: PropTypes.arrayOf(PropTypes.object).isRequired,
-  setTasks: PropTypes.func.isRequired,
-  setUpdateMode: PropTypes.func.isRequired,
+  tasksData: PropTypes.arrayOf(PropTypes.object),
   updateMode: PropTypes.shape({
     status: PropTypes.bool.isRequired,
     updatingTask: PropTypes.shape({
@@ -107,15 +82,14 @@ TodoTable.propTypes = {
       name: PropTypes.string.isRequired,
       date: PropTypes.string.isRequired,
     }),
-  }),
-  foundTasks: PropTypes.arrayOf(PropTypes.object),
-  searchWord: PropTypes.string,
+  }).isRequired,
+  updateModeOn: PropTypes.func.isRequired,
+  updateModeOff: PropTypes.func.isRequired,
+  searchedResult: PropTypes.arrayOf(PropTypes.object),
+  deleteTaskAction: PropTypes.func.isRequired,
 };
 
 TodoTable.defaultProps = {
-  updateMode: PropTypes.shape({
-    updatingTask: null,
-  }),
-  foundTasks: null,
-  searchWord: null,
+  tasksData: null,
+  searchedResult: null,
 };
