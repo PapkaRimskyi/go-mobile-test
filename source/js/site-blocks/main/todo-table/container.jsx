@@ -7,7 +7,12 @@ import { deleteTaskAction } from '../../../redux-files/action/tasks-action/tasks
 
 function mapStateToProps(state) {
   return {
-    searchedResult: state.searchWord ? [...state.tasks.filter((task) => task.name.toUpperCase() === state.searchWord)] : null,
+    searchedResult: state.searchWord ? [...state.tasks.filter((task) => {
+      if (task.name.toUpperCase().indexOf(state.searchWord) >= 0) {
+        return task;
+      }
+      return null;
+    })] : null,
   };
 }
 
