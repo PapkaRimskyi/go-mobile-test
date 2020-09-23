@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import ColumnsType from './columns-type/container';
 import ColumnInfo from './columns-info/column-info';
@@ -65,7 +66,13 @@ export default function TodoTable({ tasksData, updateMode, updateModeOn, updateM
           <table className="todo-table__table" onClick={taskButtonsHandler}>
             <tbody>
               <ColumnsType />
-              {getTasksData().map(({ id, name, date }) => <ColumnInfo key={`${id}-${new Date().getMilliseconds()}`} id={id} name={name} date={date} />)}
+              <TransitionGroup component={null}>
+                {getTasksData().map(({ id, name, date }) => (
+                  <CSSTransition key={`${id}-${name}`} timeout={300} classNames="fade">
+                    <ColumnInfo key={`${id}-${new Date().getMilliseconds()}`} id={id} name={name} date={date} />
+                  </CSSTransition>
+                ))}
+              </TransitionGroup>
             </tbody>
           </table>
         ) : <p className="todo-table__no-tasks">Ничего нет</p>}

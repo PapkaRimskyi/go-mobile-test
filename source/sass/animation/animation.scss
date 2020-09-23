@@ -1,0 +1,35 @@
+.opacity-fade-enter {
+  opacity: 0;
+}
+
+.opacity-fade-enter-active {
+  opacity: 1;
+  transition: opacity .5s;
+}
+
+.opacity-fade-exit {
+  opacity: 1;
+}
+
+.opacity-fade-exit-active {
+  opacity: 0;
+  transition: opacity .5s;
+}
+
+.fade-enter {
+  transform: translateX(-3000px);
+}
+
+.fade-enter-active {
+  transform: translateX(0);
+  transition: transform .3s;
+}
+
+.fade-exit {
+  transform: scale(1);
+}
+
+.fade-exit-active {
+  transform: scale(0);
+  transition: transform .3s;
+}
