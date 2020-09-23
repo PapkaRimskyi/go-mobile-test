@@ -13,8 +13,10 @@ export default function ColumnsType({ filtersAction }) {
   useEffect(() => {
     if (sortButton && sortButton !== prevSortButton) {
       sortButton.style.backgroundColor = 'rgba(109,165,83,.7)';
+      sortButton.disabled = true;
       if (prevSortButton) {
         prevSortButton.style.backgroundColor = null;
+        prevSortButton.disabled = false;
       }
     }
   }, [sortButton]);

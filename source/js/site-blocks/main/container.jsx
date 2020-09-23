@@ -11,10 +11,10 @@ const DATE_FILTER = 'date';
 function getFilteredTasks(tasks, filter) {
   switch (filter) {
     case ID_FILTER:
-      return tasks.sort((a, b) => a.id - b.id);
+      return [...tasks].sort((a, b) => a.id - b.id);
     case NAME_FILTER:
     case DATE_FILTER:
-      return tasks.sort((a, b) => {
+      return [...tasks].sort((a, b) => {
         if (a[filter].length > b[filter].length) {
           return 1;
         } if (a[filter].length < b[filter].length) {
