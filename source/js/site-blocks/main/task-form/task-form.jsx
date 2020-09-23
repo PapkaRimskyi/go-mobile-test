@@ -20,9 +20,10 @@ export default function TaskForm({ tasksData, updateMode, updateModeOff, addTask
   //
 
   // Обработчик <form> по сабмиту, если просто добавляется новая задача.
+  // Для того, чтобы таск создавался по последнему id + 1, я ищу максимальное id среди всех тасков и добавляю + 1.
 
   function addNewTask({ name, date }) {
-    addTask({ id: Number(tasksData.length + 1), name: name.trim(), date: date.trim() });
+    addTask({ id: Number(Math.max(...tasksData.map((task) => task.id)) + 1), name: name.trim(), date: date.trim() });
     setIsFormActive((prevState) => !prevState);
   }
 
